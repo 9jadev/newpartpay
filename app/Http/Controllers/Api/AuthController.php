@@ -31,7 +31,8 @@ class AuthController extends Controller
             'phone' => $request->phone,
             'password' => bcrypt($request->password),
         ]);
-        $user->notify(new RegistedSuccessful());
+        $name = $request->firstname.' '.$request->lastname;
+        $user->notify(new RegistedSuccessful($user));
         $accessToken = $user->createToken('authToken')->accessToken;
         return response(['user' => $user, 'accessToken' => $accessToken, 'status' => true]);
     }

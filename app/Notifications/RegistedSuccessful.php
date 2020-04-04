@@ -8,19 +8,21 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Channels\Smartchannel;
 use App\Channels\Messages\SmartMessage;
+use App\User;
 
 class RegistedSuccessful extends Notification
 {
     use Queueable;
+    public $user;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(User $user)
     {
-        //
+        $this->user = $user;
     }
 
     /**
@@ -31,7 +33,7 @@ class RegistedSuccessful extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail',Smartchannel::class];
+        return ['mail',SmartChannel::class];
     }
 
     /**
@@ -43,7 +45,7 @@ class RegistedSuccessful extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
+                    ->line($this->user->firstname.'The introduction to the notification.')
                     ->action('Notification Action', url('/'))
                     ->line('Thank you for using our application!');
     }
@@ -51,7 +53,7 @@ class RegistedSuccessful extends Notification
     
     public function toSmart($notifiable)
     {
-       return (new SmartMessage)->content("Your are welcome . ");
+       return (new SmartMessage)->content(" ".$this->user->firstname ."you are welcome to SMALLPAY thank you for signing up. ");
     }
 
 

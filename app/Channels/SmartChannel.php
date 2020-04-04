@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Channels;
-
+use App\Channels\Messages\SmartMessage;
 use Illuminate\Notifications\Notification;
 
 class SmartChannel
@@ -15,13 +15,13 @@ class SmartChannel
      */
     public function send($notifiable, Notification $notification)
     {
-        $message = $notification->toSmart($notifiable);
+        // $message = $notification->toSmart($notifiable);
 
         $to = $notifiable->routeNotificationFor('Smart');
         
-        $message = 'Test message';
-        $senderid = 'Test_Sender';
-        $token = 'epQbVa1sa5rz3Esj8A6T0wy4VtWWkl1cDgBLOFe22MOPTJMB45vRN1N8enX8vFBLWZwDfWw2fyVcVnUBOt4BmdvwyAZMhHarFtrq';
+        $message = 'Test message now';
+        $senderid = 'TestSender';
+        $token = config('services.smartsms.token');
         $baseurl = 'https://smartsmssolutions.com/api/json.php?';
 
         $sms_array = array 
