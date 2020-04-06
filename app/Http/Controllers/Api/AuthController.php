@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Notifications\RegistedSuccessful;
 
+use Illuminate\Support\Facades\Http;
+
 class AuthController extends Controller
 {
     public function register(Request $request)
@@ -31,10 +33,22 @@ class AuthController extends Controller
             'phone' => $request->phone,
             'password' => bcrypt($request->password),
         ]);
-        $name = $request->firstname.' '.$request->lastname;
+
         $user->notify(new RegistedSuccessful($user));
-        $accessToken = $user->createToken('authToken')->accessToken;
-        return response(['user' => $user, 'accessToken' => $accessToken, 'status' => true]);
+        $to = $request->phone;
+        $message = $request->firstname." ".$request->lastname." You're welcome to smallpay we hope to help you build a better customer relationship ";
+        $senderid = 'TestSender';
+        $token = config('services.smartsms.token');
+        $routing = 3;
+        $type = 0;
+        $baseurl = 'https://smartsmssolutions.com/api/json.php?';
+        $sendsms = $baseurl.'message='.$message.'&to='.$to.'&sender='.$senderid.'&type='.$type.'&routing='.$routing.'&token='.$token;
+
+        $response = Http::get($sendsms);
+        if($response->successful() == true){
+            $accessToken = $user->createToken('authToken')->accessToken;
+            return response(['user' => $user, 'accessToken' => $accessToken, 'status' => true]);
+        }
     }
 
 

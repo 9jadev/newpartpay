@@ -33,7 +33,7 @@ class RegistedSuccessful extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail',SmartChannel::class];
+        return ['mail'];
     }
 
     /**
@@ -49,13 +49,6 @@ class RegistedSuccessful extends Notification
                     ->action('Notification Action', url('/'))
                     ->line('Thank you for using our application!');
     }
-
-    
-    public function toSmart($notifiable)
-    {
-       return (new SmartMessage)->content(" ".$this->user->firstname ."you are welcome to SMALLPAY thank you for signing up. ");
-    }
-
 
     /**
      * Get the array representation of the notification.
