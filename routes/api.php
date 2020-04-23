@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+    return response(['user' => $request->user()]);
 });
 Route::get('/verified-only', function (Request $request) {
     // dd('your are succesfully verified '.auth()->user()->firstname);

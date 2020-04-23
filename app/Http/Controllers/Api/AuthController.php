@@ -15,18 +15,25 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-      $validator = Validator::make($request->all(), [
-        'firstname' => ['required', 'string', 'max:255'],
-        'lastname' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-        'phone' => ['required', 'string', 'max:16', 'unique:users,phone'],
-        'password' => ['required', 'string', 'min:8', 'confirmed'],
-        // 'password_confirmation' remenber to use this as a field will validating
+        $request->validate([
+            'firstname' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'phone' => 'required|string|max:20|unique:users,phone',
+            'password' => 'required|string|min:8|confirmed'
         ]);
+    //   $validator = Validator::make($request->all(), [
+    //     'firstname' => ['required', 'string', 'max:255'],
+    //     'lastname' => ['required', 'string', 'max:255'],
+    //     'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+    //     'phone' => ['required', 'string', 'max:20', 'unique:users,phone'],
+    //     'password' => ['required', 'string', 'min:8', 'confirmed'],
+    //     // 'password_confirmation' remenber to use this as a field will validating
+    //     ]);
       
-        if ($validator->fails()) {    
-            return response()->json($validator->messages(), 200);
-        }
+        // if ($validator->fails()) {    
+        //     return response()->json($validator->messages(), 200);
+        // }
         $user = User::create([
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
@@ -50,6 +57,10 @@ class AuthController extends Controller
             $accessToken = $user->createToken('authToken')->accessToken;
             return response(['user' => $user, 'accessToken' => $accessToken, 'status' => true]);
         }
+        
+        // $accessToken = $user->createToken('authToken')->accessToken;
+        // return response(['user' => $user, 'accessToken' => $accessToken, 'status' => true]);
+       
     }
 
     public function update_email(Request $request){
@@ -74,7 +85,7 @@ class AuthController extends Controller
         $id = Auth::id();
         $user = User::find($id);
         $validator = Validator::make($request->all(), [
-        'phone' => ['required', 'string', 'max:16', 'unique:users,phone'],
+        'phone' => ['required', 'string', 'max:20', 'unique:users,phone'],
         ]);
 
         if ($validator->fails()) {    
