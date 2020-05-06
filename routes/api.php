@@ -36,6 +36,8 @@ Route::post('/confirm-password', 'Api\ConfirmPasswordController@confirm');
 
 Route::post('/password/email', 'Api\ForgotPasswordController@sendResetLinkEmail');
 Route::post('/password/reset', 'Api\ResetPasswordController@reset');
+
+
 Route::get('/email/resend', 'Api\VerificationController@resend')->name('verification.resend');
 Route::get('/email/verify/{id}/{hash}', 'Api\VerificationController@verify')->name('verification.verify');
 

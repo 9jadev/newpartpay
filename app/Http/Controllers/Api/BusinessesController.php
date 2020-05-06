@@ -21,7 +21,11 @@ class BusinessesController extends Controller
     {
         $id = Auth::id();
         // return BusinessResource::collection(User::find($id)->Business);
-        return User::find($id)->Business;
+        $business =  User::find($id)->Business;
+        if ($business == NULL) {
+           return response(['business' => $business, 'status' => false]);
+        }
+        return response(['business' => $business, 'status' => true]);
     }
 
  
@@ -83,9 +87,7 @@ class BusinessesController extends Controller
         if ($bus->user_id != $uid) {
             return response(['message' => ' You can not update this ', 'status' => false]);
         }
-        
         return response(['business' => $bus, 'user' => $user , 'status' => true]);
-
     }
 
 

@@ -31,6 +31,9 @@ return [
     ],
     'smartsms' => [
         'token' => env('SMART_SMS'),
+    ],
+    'frontui' => [
+        'url' => env('NUXTUI'),
     ]
 
 ];

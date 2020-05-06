@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\VerifiesEmails;
+use Illuminate\Http\RedirectResponse;
 
 
 use Illuminate\Auth\Access\AuthorizationException;
@@ -49,13 +50,13 @@ class VerificationController extends Controller
     public function resend(Request $request)
     {
         if ($request->user()->hasVerifiedEmail()) {
-            return response(['message' => 'Already verified']);
+            return response(['message' => 'Already verified', 'state' => 'verified']);
         }
 
         $request->user()->sendEmailVerificationNotification();
 
         if($request->wantsJson()){
-            return response(['message' => 'Email sent']);
+            return response(['message' => 'Email sent', 'state' => 'sent']);
         }
         return back()->with('reset', true);
     }
@@ -74,12 +75,13 @@ class VerificationController extends Controller
         }
 
         if ($request->user()->hasVerifiedEmail()) {
-            return response(['message' => 'Already Verified']);
+            return redirect('http://'.env('NUXTUI').'/verifiedok');
         }
 
         if ($request->user()->markEmailAsVerified()) {
             event(new Verified($request->user()));
         }
-        return response(['message' => 'Successfully Verified '.auth()->user()->firstname]);
+        // return response(['message' => 'Successfully Verified '.auth()->user()->firstname]);
+        return redirect('http://'.env('NUXTUI').'/verified');
     }
 }
