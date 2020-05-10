@@ -66,13 +66,10 @@ class AuthController extends Controller
     public function update_email(Request $request){
         $id = Auth::id();
         $user = User::find($id);
-        $validator = Validator::make($request->all(), [
-        'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+        
+        $request->validate([
+            'email' => 'required|string|email|max:255|unique:users,email'
         ]);
-
-        if ($validator->fails()) {    
-            return response()->json($validator->messages(), 200);
-        }
 
         $user->update([
             'email' => $request->email,
@@ -84,13 +81,11 @@ class AuthController extends Controller
     public function update_phone(Request $request){
         $id = Auth::id();
         $user = User::find($id);
-        $validator = Validator::make($request->all(), [
-        'phone' => ['required', 'string', 'max:20', 'unique:users,phone'],
+        
+        $request->validate([
+            'phone' => 'required|string|max:20|unique:users,phone'
         ]);
-
-        if ($validator->fails()) {    
-            return response()->json($validator->messages(), 200);
-        }
+        
         $user->update([
             'phone' => $request->phone,
         ]);
@@ -124,13 +119,12 @@ class AuthController extends Controller
     public function update_name(Request $request){
         $id = Auth::id();
         $user = User::find($id);
-        $validator = Validator::make($request->all(), [
-            'firstname' => ['required', 'string', 'max:255'],
-            'lastname' => ['required', 'string', 'max:255'],
+        
+        $request->validate([
+            'firstname' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255'
         ]);
-        if ($validator->fails()) {    
-            return response()->json($validator->messages(), 200);
-        }
+        
         $user->update([
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
