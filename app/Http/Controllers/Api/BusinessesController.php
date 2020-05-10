@@ -128,7 +128,7 @@ class BusinessesController extends Controller
             'bank_code' => $request->bank_code,
             'account_number' => $request->account_number
         ]);
-        return response(['business' => $biz, 'user' => $user , 'status' => true]);
+        return response(['business' => $biz, 'status' => true]);
     }
 
     /**
