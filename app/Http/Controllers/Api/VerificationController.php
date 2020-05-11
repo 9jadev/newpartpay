@@ -75,13 +75,13 @@ class VerificationController extends Controller
         }
 
         if ($request->user()->hasVerifiedEmail()) {
-            return redirect('http://'.env('NUXTUI').'/verifiedok');
+            return redirect(env('NUXTUI').'/verifiedok');
         }
 
         if ($request->user()->markEmailAsVerified()) {
             event(new Verified($request->user()));
         }
         // return response(['message' => 'Successfully Verified '.auth()->user()->firstname]);
-        return redirect('http://'.env('NUXTUI').'/verified');
+        return redirect(env('NUXTUI').'/verified');
     }
 }
