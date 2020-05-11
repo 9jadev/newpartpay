@@ -103,7 +103,7 @@ class BusinessesController extends Controller
         $id = Auth::id();
         $user = User::find($id);
         if ($business->user_id != $id) {
-            return response(['message' => ' You are not authorized to make update', 'status' => false]);
+            return response(['message' => ' Unauthorized ', 'status' => false]);
         }
         
         $request->user_id = $id;
