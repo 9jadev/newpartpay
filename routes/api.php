@@ -42,6 +42,7 @@ Route::get('/email/resend', 'Api\VerificationController@resend')->name('verifica
 Route::get('/email/verify/{id}/{hash}', 'Api\VerificationController@verify')->name('verification.verify');
 
 
+
 Route::apiResource('/businesses', 'Api\BusinessesController')->middleware('auth:api', 'verified');
 Route::put('/busnesses/updateBusinesName/{business}', 'Api\BusinessesController@updateBusinesName')->middleware('auth:api', 'verified');
 
