@@ -48,7 +48,7 @@ class BusinessesController extends Controller
 			'business_about' => 'required|string',
 			'business_image' => 'required|string',
 			'bank_name' => 'required|string|max:255',
-			'bank_code' => 'required|string|max:4',
+			'bank_code' => 'required|string|max:10',
 			'account_number' => 'required|integer'
 		]);
 		
@@ -98,6 +98,25 @@ class BusinessesController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
+
+	public function updateBusinesName(Request $request, Business $business){
+		$id = Auth::id();
+		$user = User::find($id);
+		if ($business->user_id != $id) {
+			return response(['message' => ' Unauthorized ', 'status' => false]);
+		}
+		$request->validate([
+			'business_name' => 'required|unique:businesses|max:255|string',
+		]);
+		
+		$biz = Business::findOrFail($business->id);
+		$biz->update([
+			'business_name' => $request->business_name
+		]);
+		return response(['business' => $biz, 'user' => $user , 'status' => true]);
+	}
+
+	
 	public function update(Request $request, Business $business)
 	{
 		$id = Auth::id();
@@ -108,18 +127,17 @@ class BusinessesController extends Controller
 		
 		$request->user_id = $id;
 		$request->validate([
-			'user_id' => 'required|unique:businesses,user_id',
-			'business_name' => 'required|unique:businesses|max:255|string',
+			'user_id' => 'required|integer',
 			'business_type' => 'required|string|max:255',
 			'business_about' => 'required|string',
 			'business_image' => 'required|string',
 			'bank_name' => 'required|string|max:255',
-			'bank_code' => 'required|string|max:4',
+			'bank_code' => 'required|string|max:10',
 			'account_number' => 'required|integer'
 		]);
 		
-		$biz = $business->update([
-			'business_name' => $request->business_name,
+		$biz = Business::findOrFail($business->id);
+		$biz->update([
 			'business_type' => $request->business_type,
 			'business_about' => $request->business_about,
 			'business_serial' => $request->business_serial,
