@@ -44,8 +44,14 @@ Route::get('/email/verify/{id}/{hash}', 'Api\VerificationController@verify')->na
 
 
 Route::apiResource('/businesses', 'Api\BusinessesController')->middleware('auth:api', 'verified');
-Route::put('/busnesses/updateBusinesName/{business}', 'Api\BusinessesController@updateBusinesName')->middleware('auth:api', 'verified');
 
+Route::apiResource('/contact', 'Api\ContactController')->middleware('auth:api', 'verified');
+
+Route::put('/busnesses/updateBusinessName/{business}', 'Api\BusinessesController@updateBusinessName')->middleware('auth:api', 'verified');
+
+Route::put('/busnesses/updateBusinessImg/{business}', 'Api\BusinessesController@updateBusinessImg')->middleware('auth:api', 'verified');
+
+Route::get('/busnesses/contacts/{business}', 'Api\BusinessesController@getContactsNow')->middleware('auth:api');
 
 
 

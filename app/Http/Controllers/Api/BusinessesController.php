@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 use App\User;
 use  App\Business;
+use App\Contact;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BusinessResource;
 use Illuminate\Http\Request;
@@ -99,7 +100,13 @@ class BusinessesController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 
-	public function updateBusinesName(Request $request, Business $business){
+	public function getContactsNow(Business $business){
+		$contacts = Business::find($business->id)->contacts;
+		// $contacts = Contact::find($business);
+		return $contacts;
+	} 
+
+	public function updateBusinessName(Request $request, Business $business){
 		$id = Auth::id();
 		$user = User::find($id);
 		if ($business->user_id != $id) {
@@ -116,6 +123,25 @@ class BusinessesController extends Controller
 		return response(['business' => $biz, 'user' => $user , 'status' => true]);
 	}
 
+
+	public function updateBusinessImg(Request $request, Business $business){
+		$id = Auth::id();
+		$user = User::find($id);
+		if ($business->user_id != $id) {
+			return response(['message' => ' Unauthorized ', 'status' => false]);
+		}
+		$request->validate([
+			'business_image' => 'required|string|max:255'
+		]);
+		
+		$biz = Business::findOrFail($business->id);
+		$biz->update([
+			'business_image' => $request->business_image
+		]);
+		return response(['business' => $biz, 'user' => $user , 'status' => true]);
+	}
+
+
 	
 	public function update(Request $request, Business $business)
 	{
@@ -130,7 +156,7 @@ class BusinessesController extends Controller
 			'user_id' => 'required|integer',
 			'business_type' => 'required|string|max:255',
 			'business_about' => 'required|string',
-			'business_image' => 'required|string',
+			'business_image' => 'required|string|max:255',
 			'bank_name' => 'required|string|max:255',
 			'bank_code' => 'required|string|max:10',
 			'account_number' => 'required|integer'
@@ -139,14 +165,15 @@ class BusinessesController extends Controller
 		$biz = Business::findOrFail($business->id);
 		$biz->update([
 			'business_type' => $request->business_type,
+			'business_image' => $request->business_image,
 			'business_about' => $request->business_about,
 			'business_serial' => $request->business_serial,
-			'business_image' => $request->business_image,
 			'bank_name' => $request->bank_name,
 			'bank_code' => $request->bank_code,
 			'account_number' => $request->account_number
 		]);
-		return response(['business' => $biz, 'user' => $user , 'status' => true]);
+		// $biz->update($request->all());
+		return response(['business' => $biz, 'user' => $request->business_image, 'status' => true]);
 	}
 
 	/**

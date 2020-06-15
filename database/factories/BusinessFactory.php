@@ -7,7 +7,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Business::class, function (Faker $faker) {
     return [
-        'user_id' => 1,
+        'user_id' => 10000,
         'business_name' => $faker->company,
         'business_type' => 'Seller',
         'business_about' => $faker->text(200),
