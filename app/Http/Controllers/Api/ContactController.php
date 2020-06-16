@@ -14,15 +14,10 @@ class ContactController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, Contact $contact)
+    public function index()
     {
-        // $contact = Business::find($request->business_id)->contact();
-        // if ($contact == NULL) {
-        //     return response(['contacts' => null]);
-        // }
-        // return response(['contacts' => $contact]);
-        // return $request;
-        
+        $contact = Contact::get();
+        return response(['All Contact' => $contact]);
     }
 
     /**
@@ -69,7 +64,8 @@ class ContactController extends Controller
      */
     public function show(Contact $contact)
     {
-        //
+        $cont = Contact::find($contact->id);
+        return response(['contact' => $cont, 'status' => true]);
     }
 
     /**
@@ -92,7 +88,20 @@ class ContactController extends Controller
      */
     public function update(Request $request, Contact $contact)
     {
-        //
+        $contact = Contact::find($contact->id);
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'phone' => 'required|string|max:20',
+            'email' => 'required|string|max:100'
+        ]);
+
+        $contact->update([
+           'name' => $request->name,
+           'phone' => $request->phone,
+           'email' => $request->email 
+        ]);
+
+        return response(['contact' => $contact]);
     }
 
     /**
@@ -103,6 +112,7 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact)
     {
-        //
+        $contact->delete();
+        return response(['message' => 'Deleted', 'status' => true]);
     }
 }
