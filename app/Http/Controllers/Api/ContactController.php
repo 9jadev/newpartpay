@@ -52,7 +52,7 @@ class ContactController extends Controller
         $contact->phone = $request->phone; 
         $contact->email = $request->email;  
 
-        $newbiz = $business->contact()->save($contact);
+        $newbiz = $business->contacts()->save($contact);
         return response(['contact' => $newbiz, 'business' => $business , 'status' => true]);
     }
 
