@@ -23,7 +23,7 @@ class BusinessesController extends Controller
 		$id = Auth::id();
 		// return BusinessResource::collection(User::find($id)->Business);
 		$business =  User::find($id)->Business;
-		$contacts = User::find($id)->Business->contacts;
+		$contacts = isset(User::find($id)->Business->contacts) ? User::find($id)->Business->contacts : '{}' ;
 		if ($business == NULL) {
 		   return response(['business' => $business, 'status' => false]);
 		}
