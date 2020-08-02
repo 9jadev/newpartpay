@@ -47,6 +47,8 @@ Route::apiResource('/businesses', 'Api\BusinessesController')->middleware('auth:
 
 Route::apiResource('/contact', 'Api\ContactController')->middleware('auth:api', 'verified');
 
+Route::apiResource('/invoice', 'Api\InvoiceController')->middleware('auth:api', 'verified');
+
 Route::put('/busnesses/updateBusinessName/{business}', 'Api\BusinessesController@updateBusinessName')->middleware('auth:api', 'verified');
 
 Route::put('/busnesses/updateBusinessImg/{business}', 'Api\BusinessesController@updateBusinessImg')->middleware('auth:api', 'verified');

@@ -19,4 +19,9 @@ class Business extends Model
     {
         return $this->hasMany('App\Contact');
     }
+
+    public function invoices()
+    {
+        return $this->hasMany('App\Invoice');
+    }
 }
