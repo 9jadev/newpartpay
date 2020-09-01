@@ -8,6 +8,7 @@ use App\User;
 use App\Business;
 use App\Events\NewInvoiceCreatedEvent;
 use App\Invoice;
+use Illuminate\Support\Collection;
 
 class InvoiceController extends Controller
 {
@@ -21,7 +22,9 @@ class InvoiceController extends Controller
         $id = Auth::id();
 		// return BusinessResource::collection(User::find($id)->Business);
         $business =  User::find($id)->Business;
-        $invoices = isset(User::find($id)->Business->invoices) ? User::find($id)->Business->invoices : '{}' ;
+        $inv = User::find($id)->Business->invoices->sortByDesc('id');
+        // 
+        $invoices = isset($inv) ? User::find($id)->Business->invoices : '{}' ;
 		if ($business == NULL) {
 		   return response(['business' => $business, 'status' => false]);
 		}
@@ -47,7 +50,7 @@ class InvoiceController extends Controller
             'contact_phone' => 'required|string|max:25',
             'amount' => 'required|integer',
             'threshold' => 'required|integer',
-			'serialcode' => 'required|string|max:25',
+			// 'serialcode' => 'required|string|max:25',
             'type' => 'required|string|max:10',
             'about' => 'required|string|max:1500',
             'paid' => 'required|integer'
@@ -68,8 +71,6 @@ class InvoiceController extends Controller
         $invoice->complete = false;
         // return response(['All Contact' => $contact]);
         $newinvoice = $business->invoices()->save($invoice);
-        
-        event(new NewInvoiceCreatedEvent($newinvoice));
 
         return response(['newinoice' => $newinvoice, 'status' => 'true']);
     }
@@ -82,8 +83,30 @@ class InvoiceController extends Controller
      */
     public function show($id)
     {
-        //
+        $uid = Auth::id();
+		// $user = User::find($uid);
+        $invoice = Invoice::find($id);
+        $bus = Business::find($uid);
+		if ($invoice->business_id != $bus->id) {
+			return response(['message' => ' You can not update this ', 'status' => false]);
+		}
+		return response(['invoice' => $invoice, 'status' => true]);
     }
+     
+
+    public function activateInvoice(Invoice $invoice){
+        $uid = Auth::id();
+        $invoice = Invoice::findOrFail($invoice->id);
+        $bus = Business::find($uid);
+		if ($invoice->business_id != $bus->id) {
+			return response(['message' => ' You can not update this ', 'status' => false]);
+		}
+		$invoice->update([
+			'activate' => true
+        ]);
+        event(new NewInvoiceCreatedEvent($invoice));
+        return response(['invoice' => $invoice, 'status' => true]);
+    } 
 
     /**
      * Show the form for editing the specified resource.
@@ -93,7 +116,7 @@ class InvoiceController extends Controller
      */
     public function edit($id)
     {
-        //
+        
     }
 
     /**
@@ -105,7 +128,33 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $uid = Auth::id();
+		// $user = User::find($uid);
+        $invoice = Invoice::find($id);
+        $bus = Business::find($uid);
+		if ($invoice->business_id != $bus->id) {
+			return response(['message' => ' You can not update this ', 'status' => false]);
+		}
+        $invoice = Invoice::findOrFail($id);
+        $request->validate([
+			'contact_name' => 'required|max:255|string',
+			'contact_email' => 'required|string|max:255',
+            'contact_phone' => 'required|string|max:25',
+            'amount' => 'required|integer',
+            'threshold' => 'required|integer',
+            'about' => 'required|string|max:1500',
+        ]);
+		$invoice->update([
+			'contact_name' => $request->contact_name,
+			'contact_email' => $request->contact_email,
+			'contact_phone' => $request->contact_phone,
+			'amount' => $request->amount,
+			'threshold' => $request->threshold,
+			'about' => $request->about,
+		]);
+		// $invoice->update($request->all());
+		return response(['invoices' => $invoice, 'status' => true]);
+        
     }
 
     /**

@@ -53,6 +53,8 @@ Route::put('/busnesses/updateBusinessName/{business}', 'Api\BusinessesController
 
 Route::put('/busnesses/updateBusinessImg/{business}', 'Api\BusinessesController@updateBusinessImg')->middleware('auth:api', 'verified');
 
+Route::put('/invoice/activateInvoice/{invoice}', 'Api\InvoiceController@activateInvoice')->middleware('auth:api', 'verified');
+
 Route::get('/busnesses/contacts/{business}', 'Api\BusinessesController@getContactsNow')->middleware('auth:api');
 
 
