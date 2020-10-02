@@ -94,6 +94,37 @@ class InvoiceController extends Controller
     }
      
 
+    public function getInvoice($id) {
+        // where('slug', $slug)->firstOrFail()
+        $invoice = Invoice::where('serialcode', $id)->first();
+        if ($invoice != NULL) {
+            $result = ['result' => true, 'invoice' => $invoice, 'business' => $invoice->business];
+            return response($result);
+        }
+        return response(['result' => false]);
+    }
+
+    public function updateinvoice(Invoice $invoice, $amount){
+        // $invoice_amount = $invoice->paid;
+        $invoice->paid += $amount;
+        $invoice->save();
+        // return $invoice->update(['paid' => 500000]);
+        return $invoice;
+    }
+
+    public function checkInvoice($id) {
+        $invoice = Invoice::where('serialcode', $id)->first();
+        if ($invoice == NULL) {
+            return response(['result' => false]);
+        } else {
+            return response(['result' => true]);
+        }
+
+        // return $invoice;
+
+
+    }
+
     public function activateInvoice(Invoice $invoice){
         $uid = Auth::id();
         $invoice = Invoice::findOrFail($invoice->id);

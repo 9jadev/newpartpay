@@ -25,7 +25,7 @@ class NewInvoiceCreatedEvent
     public function __construct($newinvoice)
     {
         $this->newinvoice = $newinvoice;
-        Log::info('Showing fired for user:'. $newinvoice);
+        // Log::info('Showing fired for user:'. $newinvoice);
     }
 
 }

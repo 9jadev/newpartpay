@@ -18,4 +18,8 @@ class Invoice extends Model
     {
         return $this->belongsTo('App\Business');
     }
+
+    public function payments(){
+        return $this->hasMany('App\Payment');
+    }
 }

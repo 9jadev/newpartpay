@@ -24,4 +24,7 @@ class Business extends Model
     {
         return $this->hasMany('App\Invoice');
     }
+    public function payments(){
+        return $this->hasMany('App\Payment');
+    }
 }

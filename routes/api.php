@@ -49,13 +49,21 @@ Route::apiResource('/contact', 'Api\ContactController')->middleware('auth:api', 
 
 Route::apiResource('/invoice', 'Api\InvoiceController')->middleware('auth:api', 'verified');
 
+Route::apiResource('/payment', 'Api\PaymentController');
+
 Route::put('/busnesses/updateBusinessName/{business}', 'Api\BusinessesController@updateBusinessName')->middleware('auth:api', 'verified');
 
 Route::put('/busnesses/updateBusinessImg/{business}', 'Api\BusinessesController@updateBusinessImg')->middleware('auth:api', 'verified');
 
 Route::put('/invoice/activateInvoice/{invoice}', 'Api\InvoiceController@activateInvoice')->middleware('auth:api', 'verified');
+Route::get('/invoice/getInvoice/{invoice}', 'Api\InvoiceController@getInvoice');
 
-Route::get('/busnesses/contacts/{business}', 'Api\BusinessesController@getContactsNow')->middleware('auth:api');
+Route::get('/invoice/checkInvoice/{invoice}', 'Api\InvoiceController@checkInvoice');
+Route::get('/payment/markpaid/{payment}/{invoice}', 'Api\PaymentController@markpaid');
+
+Route::get('/busnesses/contacts/{business}', 'Api\BusinessesController@getContactsNow');
+
+
 
 
 
