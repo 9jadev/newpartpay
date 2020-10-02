@@ -107,8 +107,12 @@ class InvoiceController extends Controller
     public function updateinvoice(Invoice $invoice, $amount){
         // $invoice_amount = $invoice->paid;
         $invoice->paid += $amount;
-        $invoice->save();
+        
+        if ($invoice->paid >= $invoice->amount) {
+            $invoice->paid = true;
+        }
         // return $invoice->update(['paid' => 500000]);
+        $invoice->save();
         return $invoice;
     }
 
